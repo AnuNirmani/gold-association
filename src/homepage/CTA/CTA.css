@@ -1,0 +1,133 @@
+.cta {
+  position: relative;
+  margin: 40px 24px;
+  border-radius: 24px;
+  background: #2a1a00;
+  padding: 80px 24px;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* CSS bokeh effect using pseudo-elements and spans */
+.cta__bokeh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cta__bokeh span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.55;
+}
+
+.cta__bokeh span:nth-child(1) {
+  width: 320px;
+  height: 320px;
+  background: #c9a227;
+  top: -80px;
+  left: 10%;
+}
+
+.cta__bokeh span:nth-child(2) {
+  width: 240px;
+  height: 240px;
+  background: #d4820a;
+  bottom: -60px;
+  right: 15%;
+}
+
+.cta__bokeh span:nth-child(3) {
+  width: 180px;
+  height: 180px;
+  background: #f0b94a;
+  top: 30%;
+  left: 55%;
+  opacity: 0.35;
+}
+
+.cta__bokeh span:nth-child(4) {
+  width: 140px;
+  height: 140px;
+  background: #c9a227;
+  bottom: 10%;
+  left: 25%;
+  opacity: 0.3;
+}
+
+.cta__bokeh span:nth-child(5) {
+  width: 200px;
+  height: 200px;
+  background: #7a4800;
+  top: 20%;
+  right: 5%;
+  opacity: 0.4;
+}
+
+.cta__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.cta h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 700;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.cta p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 36px;
+}
+
+.cta__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta__btn {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 36px;
+  border-radius: 8px;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.cta__btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.cta__btn--dark {
+  background: #0d0f1a;
+  color: white;
+}
+
+.cta__btn--outline {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+}
+
+.cta__btn--outline:hover {
+  border-color: white;
+}
+
+@media (max-width: 480px) {
+  .cta {
+    margin: 32px 16px;
+  }
+
+  .cta__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}

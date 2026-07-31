@@ -1,0 +1,169 @@
+.eventsnews {
+  background: #f3f4f6;
+  padding: 80px 24px;
+}
+
+.eventsnews__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.eventsnews__col {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.col__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.col__header h2 {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: #0d0f1a;
+}
+
+.col__viewall {
+  color: #c9a227;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.col__viewall:hover {
+  color: #a07d18;
+}
+
+/* Events */
+.event-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+  border-bottom: 1px solid #f3f4f6;
+  gap: 16px;
+}
+
+.event-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.event-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-info strong {
+  font-size: 15px;
+  color: #0d0f1a;
+  font-weight: 600;
+}
+
+.event-info span {
+  font-size: 13px;
+  color: #c9a227;
+  font-weight: 500;
+}
+
+.event-register {
+  flex-shrink: 0;
+  background: #0d0f1a;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 22px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.event-register:hover {
+  background: #1e2340;
+}
+
+/* News */
+.news-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.news-item {
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.news-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.news-img {
+  width: 88px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.news-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.news-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.news-category {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.news-dot {
+  color: #d1d5db;
+}
+
+.news-date {
+  color: #6b7280;
+}
+
+.news-content strong {
+  font-size: 15px;
+  color: #0d0f1a;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.news-link {
+  font-size: 13px;
+  color: #c9a227;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.news-link:hover {
+  color: #a07d18;
+}
+
+@media (max-width: 768px) {
+  .eventsnews__inner {
+    grid-template-columns: 1fr;
+  }
+}

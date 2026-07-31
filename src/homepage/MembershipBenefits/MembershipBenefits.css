@@ -1,0 +1,165 @@
+.membership {
+  background: white;
+  padding: 80px 24px;
+}
+
+.membership__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.membership__title {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  color: #0d0f1a;
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.membership__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: start;
+}
+
+.membership__image-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.membership__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.membership__content h3 {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  color: #0d0f1a;
+  margin-bottom: 28px;
+}
+
+.membership__benefits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 24px;
+  margin-bottom: 28px;
+}
+
+.membership__benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.55;
+}
+
+.benefit-check {
+  flex-shrink: 0;
+  font-size: 14px;
+  margin-top: 1px;
+}
+
+.membership__btn {
+  display: inline-block;
+  background: #0d0f1a;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  margin-bottom: 28px;
+  transition: background 0.2s;
+}
+
+.membership__btn:hover {
+  background: #1e2340;
+}
+
+.membership__divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin-bottom: 24px;
+}
+
+.membership__stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.membership__stat {
+  flex: 1;
+  background: #fdf8f0;
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.membership__stat strong {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0d0f1a;
+}
+
+.membership__stat span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.membership__badge-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #fdf8f0;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.badge-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.membership__badge-block strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d0f1a;
+  margin-bottom: 5px;
+}
+
+.membership__badge-block p {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.55;
+}
+
+@media (max-width: 960px) {
+  .membership__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .membership__benefits {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .membership__stats {
+    flex-direction: column;
+  }
+}
