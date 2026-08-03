@@ -1,3 +1,4 @@
+﻿import membersImg from '../../assets/members.jpg';
 import './MembershipBenefits.css';
 
 const benefits = [
@@ -9,58 +10,46 @@ const benefits = [
 
 function MembershipBenefits() {
   return (
-    <section className="membership" id="members">
-      <div className="membership__inner">
-        <h2 className="membership__title">Membership Benefits</h2>
+    <section className="mb-section" id="members">
+      <div className="mb-inner">
+        <h3 className="mb-title">Membership Benefits</h3>
 
-        <div className="membership__grid">
-          <div className="membership__image-wrap">
-            <img
-              src="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=640&q=80"
-              alt="Gold Association members at a networking event"
-              className="membership__image"
-            />
+        <div className="mb-grid">
+          {/* Left image card */}
+          <div className="card mb-img-card">
+            <img src={membersImg} alt="Members networking" className="mb-img" />
           </div>
 
-          <div className="membership__content">
-            <h3>Why Join Gold Association?</h3>
+          {/* Right content card */}
+          <div className="card mb-content-card">
+            <h4 className="mb-card-heading">Why Join Gold Association?</h4>
 
-            <ul className="membership__benefits">
+            <div className="mb-benefits">
               {benefits.map(b => (
-                <li key={b}>
-                  <span className="benefit-check" aria-hidden="true">✅</span>
-                  {b}
-                </li>
+                <div key={b} className="mb-benefit">✅ {b}</div>
               ))}
-            </ul>
-
-            <a href="#membership" className="membership__btn">Join Membership</a>
-
-            <div className="membership__divider" />
-
-            <div className="membership__stats">
-              <div className="membership__stat">
-                <strong>500+</strong>
-                <span>Members</span>
-              </div>
-              <div className="membership__stat">
-                <strong>25+</strong>
-                <span>Years</span>
-              </div>
-              <div className="membership__stat">
-                <strong>Verified</strong>
-                <span>Standards</span>
-              </div>
             </div>
 
-            <div className="membership__badge-block">
-              <div className="badge-icon" aria-hidden="true">🥇</div>
+            <a href="#membership" className="btn-primary mb-join-btn">Join Membership</a>
+
+            {/* Mini stats */}
+            <div className="mb-stats">
+              {[['500+','Members'],['25+','Years'],['Verified','Standards']].map(([v,l]) => (
+                <div key={l} className="mb-stat">
+                  <div className="mb-stat__value">{v}</div>
+                  <div className="mb-stat__label">{l}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Trust line */}
+            <div className="mb-trust">
+              <div className="mb-trust__icon">🏅</div>
               <div>
-                <strong>Official Member Recognition</strong>
-                <p>
-                  Get listed as a <u>verified member</u> and display the association
-                  badge to increase customer trust.
-                </p>
+                <div className="mb-trust__title">Official Member Recognition</div>
+                <div className="mb-trust__body">
+                  Get listed as a verified member and display the association badge to increase customer trust.
+                </div>
               </div>
             </div>
           </div>

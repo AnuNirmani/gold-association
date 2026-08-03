@@ -1,29 +1,29 @@
-import './StatsBar.css';
+﻿import './StatsBar.css';
 
 const stats = [
-  { icon: '🏆', value: '500+', label: 'Trusted members', bg: '#fef3c7' },
-  { icon: '⏳', value: '25+', label: 'Years of excellence', bg: '#fee2e2' },
-  { icon: '✅', value: 'Verified', label: 'Standards & ethics', bg: '#d1fae5' },
-  { icon: '🌍', value: 'Nationwide', label: 'Network & support', bg: '#dbeafe' },
+  { icon: '🏅', value: '500+',      label: 'Trusted members' },
+  { icon: '⏳', value: '25+',       label: 'Years of excellence' },
+  { icon: '✅', value: 'Verified',  label: 'Standards & ethics' },
+  { icon: '🌍', value: 'Nationwide',label: 'Network & support' },
 ];
 
 function StatsBar() {
   return (
-    <section className="statsbar">
+    <div className="statsbar">
+      <div className="statsbar__grad" />
+      <div className="statsbar__sheen" />
       <div className="statsbar__inner">
-        {stats.map(({ icon, value, label, bg }) => (
-          <div className="statsbar__item" key={label}>
-            <div className="statsbar__icon" style={{ background: bg }}>
-              <span aria-hidden="true">{icon}</span>
-            </div>
-            <div className="statsbar__text">
-              <strong>{value}</strong>
-              <span>{label}</span>
+        {stats.map(({ icon, value, label }) => (
+          <div className="stat-item" key={label}>
+            <div className="stat-item__icon" aria-hidden="true">{icon}</div>
+            <div>
+              <div className="stat-item__value">{value}</div>
+              <div className="stat-item__label">{label}</div>
             </div>
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 

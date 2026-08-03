@@ -1,25 +1,14 @@
 ﻿import './App.css';
-import Navbar from './homepage/Navbar/Navbar';
-import Hero from './homepage/Hero/Hero';
-import StatsBar from './homepage/StatsBar/StatsBar';
-import GoldPrices from './homepage/GoldPrices/GoldPrices';
-import MembershipBenefits from './homepage/MembershipBenefits/MembershipBenefits';
-import EventsNews from './homepage/EventsNews/EventsNews';
-import CTA from './homepage/CTA/CTA';
-import Footer from './homepage/Footer/Footer';
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './homepage/HomePage';
+import ChartPage from './chart/ChartPage';
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <Hero />
-      <StatsBar />
-      <GoldPrices />
-      <MembershipBenefits />
-      <EventsNews />
-      <CTA />
-      <Footer />
-    </>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/chart" element={<ChartPage />} />
+    </Routes>
   );
 }
 
