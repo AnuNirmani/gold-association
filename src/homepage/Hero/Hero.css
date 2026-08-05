@@ -139,6 +139,7 @@
 .price-block__time   { font-size: 10px; color: rgba(31,41,55,0.55); }
 
 .change-up   { color: #16A34A; font-weight: 600; }
+.change-down { color: #DC2626; font-weight: 600; }
 .change-muted { font-size: 12px; color: rgba(31,41,55,0.55); }
 
 /* â”€â”€ Chart block â”€â”€ */
