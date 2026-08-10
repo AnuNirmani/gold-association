@@ -6,6 +6,8 @@ import PriceTicker from './PriceTicker/PriceTicker';
 import MetalSelector from './MetalSelector/MetalSelector';
 import PriceChart from './PriceChart/PriceChart';
 import PriceStats from './PriceStats/PriceStats';
+import { metals as fallbackMetals } from './metalData';
+import { fetchChartLiveMetals } from './livePricesApi';
 import './ChartPage.css';
 
 function ChartPage() {
@@ -13,19 +15,41 @@ function ChartPage() {
   const activeMetal = searchParams.get('metal') || '24k';
 
   const [countdown, setCountdown] = useState(30);
+  const [liveMetals, setLiveMetals] = useState(fallbackMetals);
 
   useEffect(() => {
+    let ignore = false;
+
+    const hydratePrices = async () => {
+      const rows = await fetchChartLiveMetals();
+      if (!ignore) {
+        setLiveMetals(rows);
+      }
+    };
+
+    hydratePrices();
     setCountdown(30);
+
     const t = setInterval(() => {
-      setCountdown(s => (s <= 1 ? 30 : s - 1));
+      setCountdown((seconds) => {
+        if (seconds <= 1) {
+          hydratePrices();
+          return 30;
+        }
+        return seconds - 1;
+      });
     }, 1000);
-    return () => clearInterval(t);
-  }, [activeMetal]);
+
+    return () => {
+      ignore = true;
+      clearInterval(t);
+    };
+  }, []);
 
   return (
     <>
       <Navbar />
-      <PriceTicker />
+      <PriceTicker metals={liveMetals} />
       <main className="chart-page">
         <div className="chart-page__header">
           <div>
@@ -46,7 +70,7 @@ function ChartPage() {
           </div>
         </div>
 
-        <MetalSelector activeMetal={activeMetal} />
+        <MetalSelector activeMetal={activeMetal} metals={liveMetals} />
 
         <div className="chart-page__grid">
           <PriceChart metal={activeMetal} />

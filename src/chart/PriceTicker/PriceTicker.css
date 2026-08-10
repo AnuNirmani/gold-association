@@ -45,6 +45,19 @@
   font-weight: 700;
 }
 
+.ticker__change {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.ticker__change.up {
+  color: #22c55e;
+}
+
+.ticker__change.down {
+  color: #ef4444;
+}
+
 .ticker__highlight {
   display: inline-flex;
   align-items: center;
