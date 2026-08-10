@@ -1,32 +1,34 @@
 .metal-selector {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
   margin-bottom: 24px;
 }
 
 .metal-card {
-  flex: 1;
-  background: white;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 16px;
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  padding: 18px 16px;
   text-align: left;
   display: flex;
   flex-direction: column;
   gap: 6px;
   cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .metal-card:hover {
-  border-color: #c9a227;
-  box-shadow: 0 2px 12px rgba(201, 162, 39, 0.15);
+  border-color: #D4AF37;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.18);
+  transform: translateY(-2px);
 }
 
 .metal-card--active {
-  border-color: #c9a227;
+  border-color: #D4AF37;
   background: #fffdf4;
-  box-shadow: 0 2px 12px rgba(201, 162, 39, 0.15);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.14), 0 6px 20px rgba(212, 175, 55, 0.18);
 }
 
 .metal-card__name {
@@ -35,24 +37,27 @@
   font-weight: 500;
 }
 
+.metal-card--active .metal-card__name {
+  color: #B88A1E;
+}
+
 .metal-card__price {
   font-size: 20px;
   font-weight: 800;
-  color: #0d0f1a;
+  color: #0B1220;
   line-height: 1.1;
 }
 
 .metal-card__change {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
 .metal-card__change.up   { color: #16a34a; }
 .metal-card__change.down { color: #dc2626; }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .metal-selector {
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
 }

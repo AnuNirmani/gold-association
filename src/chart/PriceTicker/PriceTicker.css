@@ -1,19 +1,19 @@
 .ticker {
-  background: #f5f5f0;
-  border-bottom: 1px solid #e5e5e0;
+  background: #0B1220;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
   white-space: nowrap;
-  height: 40px;
+  padding: 12px 0;
   display: flex;
   align-items: center;
-  margin-top: 72px; /* navbar height */
 }
 
 .ticker__track {
   display: inline-flex;
   align-items: center;
   gap: 0;
-  animation: tickerScroll 40s linear infinite;
+  animation: tickerScroll 28s linear infinite;
 }
 
 .ticker__track:hover {
@@ -28,37 +28,38 @@
 .ticker__item {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 0 24px;
-  font-size: 13px;
-  border-right: 1px solid #e0ddd8;
+  gap: 10px;
+  padding: 0 32px;
+  font-size: 14px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .ticker__name {
-  color: #374151;
-  font-weight: 500;
+  color: #D4AF37;
+  font-weight: 600;
+  letter-spacing: 0.03em;
 }
 
 .ticker__price {
-  color: #0d0f1a;
-  font-weight: 600;
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .ticker__highlight {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 14px;
+  gap: 8px;
+  padding: 6px 18px;
   margin: 0 12px;
-  background: #fef9ec;
-  border: 1px solid #c9a227;
+  background: linear-gradient(90deg, #D4AF37, #F5D67A);
   border-radius: 20px;
   font-size: 13px;
-  font-weight: 600;
-  color: #374151;
+  font-weight: 700;
+  color: #0B1220;
   white-space: nowrap;
 }
 
 .ticker__highlight span {
-  color: #c9a227;
+  color: #0B1220;
+  font-weight: 800;
 }

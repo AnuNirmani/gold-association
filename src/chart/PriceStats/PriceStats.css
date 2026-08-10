@@ -1,8 +1,9 @@
 .price-stats {
-  background: white;
-  border-radius: 16px;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 24px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -11,7 +12,7 @@
 .price-stats__title {
   font-size: 16px;
   font-weight: 700;
-  color: #0d0f1a;
+  color: #0B1220;
 }
 
 .stats-grid {
@@ -21,9 +22,10 @@
 }
 
 .stat-box {
-  background: #f9f9f6;
-  border-radius: 10px;
-  padding: 14px;
+  background: #F7F4EF;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -36,33 +38,34 @@
 }
 
 .stat-value {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
-  color: #0d0f1a;
+  color: #0B1220;
 }
 
-.stat-value--high { color: #16a34a; }
-.stat-value--low  { color: #dc2626; }
+.stat-value--high { color: #15803d; }
+.stat-value--low  { color: #b91c1c; }
 
 .change-card {
-  border-radius: 12px;
-  padding: 18px;
+  border-radius: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  background: #0B1220;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.change-card.up   { background: #0d0f1a; }
-.change-card.down { background: #1a0808; }
+.change-card.down { background: #160808; }
 
 .change-label {
-  font-size: 13px;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.6);
   font-weight: 500;
 }
 
 .change-value {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
   color: #22c55e;
 }

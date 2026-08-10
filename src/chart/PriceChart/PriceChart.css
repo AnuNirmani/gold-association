@@ -1,8 +1,9 @@
 .price-chart {
-  background: white;
-  border-radius: 16px;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 24px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -12,16 +13,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .price-chart__title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 15px;
   font-weight: 700;
-  color: #0d0f1a;
+  color: #0B1220;
 }
 
 .live-dot {
@@ -40,28 +45,29 @@
 
 .price-chart__periods {
   display: flex;
-  gap: 4px;
+  gap: 6px;
 }
 
 .period-btn {
   font-size: 13px;
   font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  border-radius: 12px;
   background: transparent;
   color: #6b7280;
-  border: none;
-  transition: background 0.15s, color 0.15s;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
 .period-btn:hover {
   background: #f3f4f6;
-  color: #0d0f1a;
+  color: #0B1220;
 }
 
 .period-btn--active {
-  background: #0d0f1a;
-  color: white;
+  background: #0B1220;
+  color: #ffffff;
+  border-color: #0B1220;
 }
 
 .price-chart__svg {
@@ -73,18 +79,18 @@
 .price-chart__x-axis {
   display: flex;
   justify-content: space-between;
-  padding: 4px 0 0;
+  padding: 6px 0 0;
   font-size: 11px;
   color: #9ca3af;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .price-chart__footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 12px;
-  border-top: 1px solid #f3f4f6;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   flex-wrap: wrap;
   gap: 8px;
 }
