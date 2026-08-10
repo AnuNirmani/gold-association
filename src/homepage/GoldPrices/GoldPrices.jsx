@@ -114,6 +114,10 @@ function GoldPrices() {
         `http://127.0.0.1:8000/gold-prices/latest/${karat.karatId}`,
       ];
 
+      // `/api/gold-prices/latest/${karat.karatId}`,
+      //   ...(baseUrl ? [`${baseUrl}/api/gold-prices/latest/${karat.karatId}`] : []),
+      // ];
+
       const payload = await fetchFirstJson(latestEndpoints);
       const parsed = parseLatestRow(payload);
 

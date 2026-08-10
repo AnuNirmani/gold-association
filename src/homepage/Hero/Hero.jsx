@@ -138,6 +138,17 @@ function Hero() {
       `http://127.0.0.1:8000/gold-prices/today`,
     ];
 
+    //     const latestEndpoints = [
+    //   `/api/gold-prices/latest/${API_KARAT_ID}`,
+    //   ...(baseUrl ? [`${baseUrl}/api/gold-prices/latest/${API_KARAT_ID}`] : []),
+    // ];
+
+    // const todayEndpoints = [
+    //   `/api/gold-prices/today/${API_KARAT_ID}`,
+    //   `/api/gold-prices/today`,
+    //   ...(baseUrl ? [`${baseUrl}/api/gold-prices/today/${API_KARAT_ID}`, `${baseUrl}/api/gold-prices/today`] : []),
+    // ];
+
     const fetchFirstJson = async (endpoints) => {
       for (const endpoint of endpoints) {
         try {
