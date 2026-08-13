@@ -30,7 +30,7 @@ function parseLatestRow(payload) {
   return { price, changePercent, direction };
 }
 
-function parseTodayRows(payload) {
+function parseLatestRows(payload) {
   if (!payload) return [];
 
   const root = payload?.data && typeof payload.data === 'object' ? payload.data : payload;
@@ -39,11 +39,9 @@ function parseTodayRows(payload) {
   return rows
     .map((row) => {
       const karatId = Number(row?.karat_id);
-      const source = row?.last_price && typeof row.last_price === 'object' ? row.last_price : row;
-
-      const price = parseNumeric(source?.price ?? source?.latest_price ?? source?.amount ?? source?.value);
-      const changePercent = parseNumeric(source?.change_percent ?? source?.changePercent ?? source?.change);
-      const direction = typeof source?.direction === 'string' ? source.direction.toLowerCase() : null;
+      const price = parseNumeric(row?.price ?? row?.latest_price ?? row?.amount ?? row?.value);
+      const changePercent = parseNumeric(row?.change_percent ?? row?.changePercent ?? row?.change);
+      const direction = typeof row?.direction === 'string' ? row.direction.toLowerCase() : null;
 
       return {
         karatId,
@@ -53,6 +51,90 @@ function parseTodayRows(payload) {
       };
     })
     .filter((row) => Number.isFinite(row.karatId) && row.karatId > 0);
+}
+
+function parseTodayRows(payload) {
+  if (!payload) return [];
+
+  const root = payload?.data && typeof payload.data === 'object' ? payload.data : payload;
+  const rows = Array.isArray(root) ? root : [root];
+
+  return rows
+    .map((row) => {
+      const karatId = Number(row?.karat_id);
+      const stats = row?.statistics && typeof row.statistics === 'object' ? row.statistics : null;
+      const source = row?.last_price && typeof row.last_price === 'object' ? row.last_price : row;
+      const points = Array.isArray(row?.prices) ? row.prices : [];
+
+      let latestUpdatedPointPrice = null;
+      if (points.length > 0) {
+        const sortedPoints = [...points].sort((a, b) => {
+          const aTime = new Date(a?.updated_at ?? 0).getTime();
+          const bTime = new Date(b?.updated_at ?? 0).getTime();
+          return aTime - bTime;
+        });
+
+        latestUpdatedPointPrice = parseNumeric(
+          sortedPoints[sortedPoints.length - 1]?.price ?? null
+        );
+      }
+
+      const price = parseNumeric(
+        source?.price ?? source?.latest_price ?? source?.amount ?? source?.value ?? stats?.close
+      );
+      const changePercent = parseNumeric(
+        source?.change_percent ?? source?.changePercent ?? source?.change ?? stats?.change_percent
+      );
+      const directionRaw = source?.direction ?? stats?.direction;
+      const direction = typeof directionRaw === 'string' ? directionRaw.toLowerCase() : null;
+
+      const open = parseNumeric(stats?.open);
+      const close = latestUpdatedPointPrice ?? parseNumeric(stats?.close);
+      const high = parseNumeric(stats?.high);
+      const low = parseNumeric(stats?.low);
+      const change = parseNumeric(stats?.change);
+
+      const hasDirection = direction === 'up' || direction === 'down';
+      const up = hasDirection ? direction === 'up' : (change ?? 0) >= 0;
+
+      return {
+        karatId,
+        price,
+        changePercent,
+        direction,
+        stats: {
+          open,
+          close,
+          high,
+          low,
+          change,
+          up,
+          direction,
+        },
+      };
+    })
+    .filter((row) => Number.isFinite(row.karatId) && row.karatId > 0);
+}
+
+function toStatsByMetal(todayRows) {
+  const byMetal = {};
+
+  for (const row of todayRows) {
+    const metalId = Object.keys(KARAT_ID_BY_METAL).find((key) => KARAT_ID_BY_METAL[key] === row.karatId);
+    if (!metalId) continue;
+
+    byMetal[metalId] = {
+      open: row.stats?.open,
+      close: row.stats?.close,
+      high: row.stats?.high,
+      low: row.stats?.low,
+      change: row.stats?.change,
+      up: row.stats?.up,
+      direction: row.stats?.direction,
+    };
+  }
+
+  return byMetal;
 }
 
 async function fetchFirstJson(endpoints) {
@@ -80,6 +162,13 @@ async function fetchFirstJson(endpoints) {
 
 export async function fetchChartLiveMetals() {
   const baseUrl = import.meta.env.VITE_LARAVEL_API_BASE_URL?.replace(/\/$/, '');
+
+  const latestAllEndpoints = [
+    '/api/gold-prices/latest',
+    ...(baseUrl ? [`${baseUrl}/api/gold-prices/latest`, `${baseUrl}/gold-prices/latest`] : []),
+    'http://127.0.0.1:8000/api/gold-prices/latest',
+    'http://127.0.0.1:8000/gold-prices/latest',
+  ];
 
   const todayEndpoints = [
     '/api/gold-prices/today',
@@ -113,13 +202,31 @@ export async function fetchChartLiveMetals() {
 
   const todayPayload = await fetchFirstJson(todayEndpoints);
   const todayRows = parseTodayRows(todayPayload);
+  const statsByMetal = toStatsByMetal(todayRows);
+
+  const latestAllPayload = await fetchFirstJson(latestAllEndpoints);
+  const latestRows = parseLatestRows(latestAllPayload);
 
   const rowByKarat = new Map(todayRows.map((row) => [row.karatId, row]));
+  const latestByKarat = new Map(latestRows.map((row) => [row.karatId, row]));
 
   const rows = await Promise.all(
     defaultRows.map(async (metal) => {
       const karatId = KARAT_ID_BY_METAL[metal.id];
+      const latestRowFromAll = latestByKarat.get(karatId);
       const todayRow = rowByKarat.get(karatId);
+
+      if (latestRowFromAll && latestRowFromAll.price != null) {
+        const hasDirection = latestRowFromAll.direction === 'up' || latestRowFromAll.direction === 'down';
+        const up = hasDirection ? latestRowFromAll.direction === 'up' : (latestRowFromAll.changePercent ?? 0) >= 0;
+
+        return {
+          ...metal,
+          price: latestRowFromAll.price,
+          changePercent: latestRowFromAll.changePercent,
+          up,
+        };
+      }
 
       if (todayRow && todayRow.price != null) {
         const hasDirection = todayRow.direction === 'up' || todayRow.direction === 'down';
@@ -151,5 +258,8 @@ export async function fetchChartLiveMetals() {
     })
   );
 
-  return rows;
+  return {
+    metals: rows,
+    statsByMetal,
+  };
 }

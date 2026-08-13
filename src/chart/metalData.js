@@ -7,11 +7,11 @@ export const metals = [
 ];
 
 export const metalStats = {
-  '24k':   { open: 6257, close: 6276, high: 6286, low: 6249, change: 0.30, up: true  },
-  '22k':   { open: 5710, close: 5725, high: 5738, low: 5705, change: 0.26, up: true  },
-  '18k':   { open: 4668, close: 4684, high: 4695, low: 4662, change: 0.34, up: true  },
-  'silver':{ open: 784,  close: 782,  high: 790,  low: 778,  change: 0.25, up: false },
-  'used':  { open: 5437, close: 5450, high: 5465, low: 5430, change: 0.24, up: true  },
+  '24k':   { open: 6257, close: 6276, high: 6286, low: 6249, change: 37, up: true  },
+  '22k':   { open: 5710, close: 5725, high: 5738, low: 5705, change: 33, up: true  },
+  '18k':   { open: 4668, close: 4684, high: 4695, low: 4662, change: 33, up: true  },
+  'silver':{ open: 784,  close: 782,  high: 790,  low: 778,  change: 12, up: false },
+  'used':  { open: 5437, close: 5450, high: 5465, low: 5430, change: 35, up: true  },
 };
 
 // 30-day (1M) demo price data per metal
