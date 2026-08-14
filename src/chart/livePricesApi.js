@@ -1,4 +1,4 @@
-import { metals as fallbackMetals } from './metalData';
+import { metals as fallbackMetals, chartData, periods, getPeriodData } from './metalData';
 
 const KARAT_ID_BY_METAL = {
   '24k': 1,
@@ -92,7 +92,11 @@ function parseTodayRows(payload) {
       const close = latestUpdatedPointPrice ?? parseNumeric(stats?.close);
       const high = parseNumeric(stats?.high);
       const low = parseNumeric(stats?.low);
-      const change = parseNumeric(stats?.change);
+      
+      // Change is the gap between high and low
+      const change = (high !== null && low !== null) 
+        ? Number((high - low).toFixed(2))
+        : null;
 
       const hasDirection = direction === 'up' || direction === 'down';
       const up = hasDirection ? direction === 'up' : (change ?? 0) >= 0;
@@ -262,4 +266,86 @@ export async function fetchChartLiveMetals() {
     metals: rows,
     statsByMetal,
   };
+}
+
+/**
+ * Fetch chart data for a specific karat and time range
+ * @param {number} karatId - The karat ID (1-5)
+ * @param {string} range - The time range ('1D', '1W', '1M', '3M', '1Y')
+ * @returns {Promise<{prices: number[], labels: string[]}>} Chart data with prices and labels
+ */
+export async function fetchChartRangeData(karatId, range = '1D') {
+  if (!karatId || karatId <= 0) {
+    console.warn('Invalid karatId:', karatId);
+    return { prices: [], labels: [] };
+  }
+
+  const baseUrl = import.meta.env.VITE_LARAVEL_API_BASE_URL?.replace(/\/$/, '');
+
+  const chartEndpoints = [
+    `/api/gold-prices/chart/${karatId}?range=${range}`,
+    ...(baseUrl ? [`${baseUrl}/api/gold-prices/chart/${karatId}?range=${range}`, `${baseUrl}/gold-prices/chart/${karatId}?range=${range}`] : []),
+    `http://127.0.0.1:8000/api/gold-prices/chart/${karatId}?range=${range}`,
+    `http://127.0.0.1:8000/gold-prices/chart/${karatId}?range=${range}`,
+  ];
+
+  console.log(`Fetching chart data for karat ${karatId}, range ${range}`);
+  
+  const payload = await fetchFirstJson(chartEndpoints);
+
+  if (!payload) {
+    console.warn('No payload received from backend');
+    return { prices: [], labels: [] };
+  }
+
+  console.log('Backend response:', payload);
+
+  // Extract chart data from various possible response structures
+  let chartPoints = [];
+  
+  // Try multiple possible response structures
+  if (Array.isArray(payload?.data?.points)) {
+    chartPoints = payload.data.points;
+  } else if (Array.isArray(payload?.data?.chart_points)) {
+    chartPoints = payload.data.chart_points;
+  } else if (Array.isArray(payload?.points)) {
+    chartPoints = payload.points;
+  } else if (Array.isArray(payload?.chart_points)) {
+    chartPoints = payload.chart_points;
+  } else if (Array.isArray(payload?.data)) {
+    // If data is directly an array
+    chartPoints = payload.data;
+  }
+
+  if (chartPoints.length === 0) {
+    console.warn('No chart points found in response');
+    return { prices: [], labels: [] };
+  }
+
+  console.log('Extracted chart points:', chartPoints);
+
+  // Extract prices and labels from chart points
+  const prices = chartPoints
+    .map((point, idx) => {
+      // Log first point to see actual structure
+      if (idx === 0) {
+        console.log('First chart point structure:', point);
+        console.log('Point keys:', Object.keys(point));
+      }
+      
+      // Try multiple possible price field names
+      const price = point?.price ?? point?.value ?? point?.amount ?? point?.latest_price ?? 0;
+      return parseNumeric(price);
+    })
+    .map(price => price !== null ? price : 0); // Use 0 for missing prices
+
+  const labels = chartPoints.map((point, index) => {
+    // Try multiple possible label field names
+    return point?.label ?? point?.time ?? point?.date ?? point?.recorded_at ?? `${index}`;
+  });
+
+  console.log('Extracted prices:', prices);
+  console.log('Extracted labels:', labels);
+
+  return { prices, labels };
 }
