@@ -1,23 +1,16 @@
-import { metalStats } from '../metalData';
 import './PriceStats.css';
 
 function formatLkr(value) {
+  if (value == null || value === '') return '—';
   const num = typeof value === 'number' ? value : Number(value);
   if (!Number.isFinite(num)) return '—';
   return num.toLocaleString();
 }
 
-function PriceStats({ metal: metalId, statsByMetal = {} }) {
-  const fallbackStats = metalStats[metalId] || metalStats['24k'];
+function PriceStats({ metal: metalId, statsByMetal = {}, chartStats }) {
   const liveStats = statsByMetal?.[metalId] || {};
-  const stats = {
-    open: liveStats.open ?? fallbackStats.open,
-    close: liveStats.close ?? fallbackStats.close,
-    high: liveStats.high ?? fallbackStats.high,
-    low: liveStats.low ?? fallbackStats.low,
-    change: liveStats.change ?? fallbackStats.change,
-    up: typeof liveStats.up === 'boolean' ? liveStats.up : fallbackStats.up,
-  };
+  const stats = chartStats ?? liveStats;
+  const isUp = typeof stats.up === 'boolean' ? stats.up : true;
 
   return (
     <div className="price-stats">
@@ -42,10 +35,10 @@ function PriceStats({ metal: metalId, statsByMetal = {} }) {
         </div>
       </div>
 
-      <div className={`change-card ${stats.up ? 'up' : 'down'}`}>
+      <div className={`change-card ${isUp ? 'up' : 'down'}`}>
         <span className="change-label">Change</span>
         <span className="change-value">
-          {stats.up ? '▲' : '▼'} LKR {formatLkr(stats.change)}
+          {typeof stats.up === 'boolean' ? (stats.up ? '▲' : '▼') : '—'} LKR {formatLkr(stats.change)}
         </span>
       </div>
 

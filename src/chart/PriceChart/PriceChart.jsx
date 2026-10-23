@@ -1,18 +1,8 @@
 import { useState, useEffect } from 'react';
-import { metals, periods } from '../metalData';
 import { fetchChartRangeData } from '../livePricesApi';
 import './PriceChart.css';
 
 const PERIOD_KEYS = ['1D', '1W', '1M', '3M', '1Y'];
-
-// Map metal ID to karat ID for API calls
-const KARAT_ID_BY_METAL = {
-  '24k': 1,
-  '22k': 2,
-  '18k': 3,
-  silver: 4,
-  used: 5,
-};
 
 function buildSmoothPath(pts) {
   if (pts.length < 2) return '';
@@ -33,11 +23,11 @@ function SparkSVG({ data, metalId, isLoading }) {
   const cH = H - padT - padB;
 
   // Handle empty or loading state
-  if (isLoading || !data || data.length === 0) {
+  if (!data || data.length === 0) {
     return (
       <svg viewBox={`0 0 ${W} ${H}`} className="price-chart__svg" aria-hidden="true">
         <text x={W / 2} y={H / 2} textAnchor="middle" fontSize="14" fill="#9ca3af">
-          {isLoading ? 'Loading chart data...' : 'No data available'}
+          {isLoading ? 'Loading chart data...' : 'No backend chart data available'}
         </text>
       </svg>
     );
@@ -60,13 +50,15 @@ function SparkSVG({ data, metalId, isLoading }) {
   }
 
   const pts = data.map((v, i) => ({
-    x: padL + (i / (data.length - 1)) * cW,
+    x: data.length === 1 ? padL + cW / 2 : padL + (i / (data.length - 1)) * cW,
     y: padT + (1 - (v - yMin) / (yMax - yMin)) * cH,
   }));
 
   const linePath = buildSmoothPath(pts);
   const last = pts[pts.length - 1];
-  const areaPath = `${linePath} L ${last.x},${padT + cH} L ${pts[0].x},${padT + cH} Z`;
+  const areaPath = data.length > 1
+    ? `${linePath} L ${last.x},${padT + cH} L ${pts[0].x},${padT + cH} Z`
+    : '';
 
   // 4 evenly-spaced y-axis ticks
   const yTicks = Array.from({ length: 4 }, (_, i) =>
@@ -98,22 +90,31 @@ function SparkSVG({ data, metalId, isLoading }) {
       })}
 
       {/* gradient area fill */}
-      <path d={areaPath} fill={`url(#${gradId})`} />
+      {data.length > 1 && <path d={areaPath} fill={`url(#${gradId})`} />}
 
       {/* chart line */}
-      <path d={linePath} fill="none" stroke="#c9a227" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+      {data.length > 1 && <path d={linePath} fill="none" stroke="#c9a227" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />}
+      {data.length === 1 && <circle cx={last.x} cy={last.y} r="5" fill="#c9a227" />}
     </svg>
   );
 }
 
-function PriceChart({ metal: metalId }) {
+function PriceChart({
+  metal: metalId,
+  karatId,
+  metalName,
+  refreshKey,
+  todaySeries = [],
+  latestPrice,
+  latestUpdatedAt,
+  onStatistics,
+}) {
   const [period, setPeriod] = useState('1D');
   const [chartData, setChartData] = useState([]);
   const [xLabels, setXLabels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const metalInfo = metals.find(m => m.id === metalId) || metals[0];
-  const karatId = KARAT_ID_BY_METAL[metalId] || 1;
+  const [isShowingTodayFallback, setIsShowingTodayFallback] = useState(false);
+  const [fallbackDate, setFallbackDate] = useState(null);
 
   // Fetch chart data when metal or period changes
   useEffect(() => {
@@ -121,24 +122,72 @@ function PriceChart({ metal: metalId }) {
 
     const loadChartData = async () => {
       setIsLoading(true);
+      onStatistics?.(null);
+      let immediatePrices = [];
+      let immediateLabels = [];
+      let immediateFallbackDate = null;
       try {
-        const { prices, labels } = await fetchChartRangeData(karatId, period);
+        const todayPrices = todaySeries.map((point) => point.price).filter(Number.isFinite);
+        const todayLabels = todaySeries
+          .filter((point) => Number.isFinite(point.price))
+          .map((point) => point.label);
+
+        if (period === '1D' && todayPrices.length > 0) {
+          setChartData(todayPrices);
+          setXLabels(todayLabels);
+          setIsShowingTodayFallback(false);
+          setFallbackDate(null);
+          setIsLoading(false);
+          return;
+        }
+
+        if (period === '1D' && Number.isFinite(latestPrice)) {
+          immediatePrices = [latestPrice];
+          const latestDate = latestUpdatedAt ? new Date(latestUpdatedAt) : null;
+          immediateLabels = latestDate && !Number.isNaN(latestDate.getTime())
+            ? [latestDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })]
+            : ['Latest'];
+          immediateFallbackDate = latestDate && !Number.isNaN(latestDate.getTime())
+            && latestDate.toDateString() !== new Date().toDateString()
+            ? latestDate.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' })
+            : null;
+          setChartData(immediatePrices);
+          setXLabels(immediateLabels);
+          setFallbackDate(immediateFallbackDate);
+        }
+
+        const { prices, labels, statistics, fallbackDate: latestDate } = await fetchChartRangeData(
+          Number(karatId),
+          period,
+          latestUpdatedAt
+        );
         
         if (isMounted) {
-          // Ensure all prices are numbers (convert 0 for missing data)
-          const validPrices = prices && prices.length > 0 
-            ? prices.map(p => typeof p === 'number' ? p : 0)
-            : [];
-          
-          setChartData(validPrices);
-          setXLabels(labels && labels.length > 0 ? labels : []);
+          if (statistics) {
+            onStatistics?.({
+              ...statistics,
+              up: statistics.direction === 'up'
+                ? true
+                : statistics.direction === 'down'
+                  ? false
+                  : Number(statistics.close) >= Number(statistics.open),
+            });
+          }
+          const historyHasSeries = prices.length > 1 || todayPrices.length === 0;
+          const keepLatestPrice = period === '1D' && prices.length === 0 && immediatePrices.length > 0;
+          setChartData(keepLatestPrice ? immediatePrices : historyHasSeries ? prices : todayPrices);
+          setXLabels(keepLatestPrice ? immediateLabels : historyHasSeries ? labels : todayLabels);
+          setIsShowingTodayFallback(!historyHasSeries && todayPrices.length > 0);
+          setFallbackDate(latestDate ?? (keepLatestPrice ? immediateFallbackDate : null));
           setIsLoading(false);
         }
       } catch (error) {
         console.error('Error fetching chart data:', error);
         if (isMounted) {
-          setChartData([]);
-          setXLabels([]);
+          setChartData(immediatePrices);
+          setXLabels(immediateLabels);
+          setIsShowingTodayFallback(false);
+          setFallbackDate(immediateFallbackDate);
           setIsLoading(false);
         }
       }
@@ -149,7 +198,7 @@ function PriceChart({ metal: metalId }) {
     return () => {
       isMounted = false;
     };
-  }, [karatId, period]);
+  }, [karatId, period, refreshKey, todaySeries, latestPrice, latestUpdatedAt, onStatistics]);
 
   // Calculate x-axis label positions
   const displayLabels = xLabels && xLabels.length > 0
@@ -161,7 +210,7 @@ function PriceChart({ metal: metalId }) {
       <div className="price-chart__header">
         <div className="price-chart__title">
           <span className="live-dot" />
-          {metalInfo.name} (LKR)
+          {metalName ?? metalId} (LKR)
         </div>
         <div className="price-chart__periods">
           {PERIOD_KEYS.map(p => (
@@ -193,7 +242,13 @@ function PriceChart({ metal: metalId }) {
           <span className="legend-up">↑ Up</span>
           <span className="legend-down">↓ Down</span>
         </div>
-        <span className="chart-disclaimer">Prices are for informational purposes only.</span>
+        <span className="chart-disclaimer">
+          {fallbackDate
+            ? `No prices recorded today; showing latest from ${fallbackDate}${isLoading ? ' while chart history loads' : ''}.`
+            : isShowingTodayFallback
+            ? "Showing today's backend data; selected history range is unavailable."
+            : 'Prices are for informational purposes only.'}
+        </span>
       </div>
     </div>
   );

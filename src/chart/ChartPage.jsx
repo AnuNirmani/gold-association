@@ -6,50 +6,36 @@ import PriceTicker from './PriceTicker/PriceTicker';
 import MetalSelector from './MetalSelector/MetalSelector';
 import PriceChart from './PriceChart/PriceChart';
 import PriceStats from './PriceStats/PriceStats';
-import { metals as fallbackMetals, metalStats as fallbackStats } from './metalData';
-import { fetchChartLiveMetals } from './livePricesApi';
+import { useLivePrices } from './livePricesContext';
 import './ChartPage.css';
+
+const EMPTY_SERIES = [];
 
 function ChartPage() {
   const [searchParams] = useSearchParams();
   const activeMetal = searchParams.get('metal') || '24k';
 
   const [countdown, setCountdown] = useState(30);
-  const [liveMetals, setLiveMetals] = useState(fallbackMetals);
-  const [liveStatsByMetal, setLiveStatsByMetal] = useState(fallbackStats);
+  const [chartStats, setChartStats] = useState(null);
+  const {
+    metals: liveMetals,
+    statsByMetal,
+    seriesByMetal,
+    karatIdByMetal,
+    refreshedAt,
+  } = useLivePrices();
+  const activeMetalInfo = liveMetals.find((metal) => metal.id === activeMetal);
+  const updatedTime = refreshedAt ? new Date(refreshedAt).toLocaleTimeString() : 'Waiting for backend';
 
   useEffect(() => {
-    let ignore = false;
-
-    const hydratePrices = async () => {
-      const payload = await fetchChartLiveMetals();
-      if (!ignore) {
-        setLiveMetals(payload?.metals ?? fallbackMetals);
-        setLiveStatsByMetal((prev) => ({
-          ...prev,
-          ...(payload?.statsByMetal ?? {}),
-        }));
-      }
-    };
-
-    hydratePrices();
     setCountdown(30);
-
     const t = setInterval(() => {
       setCountdown((seconds) => {
-        if (seconds <= 1) {
-          hydratePrices();
-          return 30;
-        }
-        return seconds - 1;
+        return seconds <= 1 ? 30 : seconds - 1;
       });
     }, 1000);
-
-    return () => {
-      ignore = true;
-      clearInterval(t);
-    };
-  }, []);
+    return () => clearInterval(t);
+  }, [refreshedAt]);
 
   return (
     <>
@@ -70,7 +56,7 @@ function ChartPage() {
             </p>
           </div>
           <div className="chart-page__update-info">
-            <div>Last updated: <strong className="just-now">just now</strong></div>
+            <div>Last updated: <strong className="just-now">{updatedTime}</strong></div>
             <div>Next update in <strong>{countdown}s</strong></div>
           </div>
         </div>
@@ -78,8 +64,21 @@ function ChartPage() {
         <MetalSelector activeMetal={activeMetal} metals={liveMetals} />
 
         <div className="chart-page__grid">
-          <PriceChart metal={activeMetal} />
-          <PriceStats metal={activeMetal} statsByMetal={liveStatsByMetal} />
+          <PriceChart
+            metal={activeMetal}
+            metalName={activeMetalInfo?.name}
+            karatId={karatIdByMetal[activeMetal]}
+            latestPrice={activeMetalInfo?.price}
+            latestUpdatedAt={activeMetalInfo?.updatedAt}
+            refreshKey={refreshedAt}
+            todaySeries={seriesByMetal[activeMetal] ?? EMPTY_SERIES}
+            onStatistics={setChartStats}
+          />
+          <PriceStats
+            metal={activeMetal}
+            statsByMetal={statsByMetal}
+            chartStats={chartStats}
+          />
         </div>
       </main>
       <Footer />

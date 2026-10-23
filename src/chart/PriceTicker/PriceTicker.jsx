@@ -1,13 +1,12 @@
-import { metals } from '../metalData';
 import './PriceTicker.css';
 
 function formatSignedPercent(changePercent) {
-  if (changePercent == null) return '0.00%';
+  if (changePercent == null) return '—';
   const sign = changePercent > 0 ? '+' : changePercent < 0 ? '-' : '';
   return `${sign}${Math.abs(changePercent).toFixed(2)}%`;
 }
 
-function PriceTicker({ metals: sourceMetals = metals }) {
+function PriceTicker({ metals: sourceMetals = [] }) {
   const tickerItems = [
     ...sourceMetals.map((m) => ({ type: 'price', metal: m })),
     { type: 'highlight', text: 'Today Price', change: 'Live' },
@@ -26,9 +25,9 @@ function PriceTicker({ metals: sourceMetals = metals }) {
           ) : (
             <span className="ticker__item" key={i}>
               <span className="ticker__name">{item.metal.name}</span>
-              <span className="ticker__price">LKR {item.metal.price.toLocaleString()}</span>
+              <span className="ticker__price">LKR {item.metal.price == null ? '—' : item.metal.price.toLocaleString()}</span>
               <span className={`ticker__change ${item.metal.up ? 'up' : 'down'}`}>
-                {item.metal.up ? '▲' : '▼'} {formatSignedPercent(item.metal.changePercent ?? item.metal.change)}
+                {item.metal.up == null ? '—' : `${item.metal.up ? '▲' : '▼'} ${formatSignedPercent(item.metal.changePercent)}`}
               </span>
             </span>
           )
