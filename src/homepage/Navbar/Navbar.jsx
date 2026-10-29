@@ -34,7 +34,7 @@ function Navbar() {
               <a
                 key={link}
                 className="nav-link"
-                href={link === 'Home' ? '/' : `/#${link.toLowerCase()}`}
+                href={link === 'Home' ? '/' : link === 'About' ? '/about' : link === 'Members' ? '/members' : link === 'Events' || link === 'News' ? `/${link.toLowerCase()}` : `/#${link.toLowerCase()}`}
               >
                 {link}
               </a>
@@ -55,7 +55,7 @@ function Navbar() {
         </div>
         <div className="mobile-drawer__links">
           {navLinks.map(link => (
-            <a key={link} href={link === 'Home' ? '/' : `/#${link.toLowerCase()}`} onClick={close}>
+            <a key={link} href={link === 'Home' ? '/' : link === 'About' ? '/about' : link === 'Members' ? '/members' : link === 'Events' || link === 'News' ? `/${link.toLowerCase()}` : `/#${link.toLowerCase()}`} onClick={close}>
               {link}
             </a>
           ))}

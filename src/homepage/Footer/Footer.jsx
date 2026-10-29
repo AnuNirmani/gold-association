@@ -36,7 +36,7 @@ function Footer() {
           <div className="footer__col-title">Quick Links</div>
           <ul>
             {quickLinks.map(l => (
-              <li key={l}><a href={l === 'Home' ? '/' : `/#${l.toLowerCase()}`}>{l}</a></li>
+              <li key={l}><a href={l === 'Home' ? '/' : l === 'About' ? '/about' : l === 'Members' || l === 'Events' || l === 'News' ? `/${l.toLowerCase()}` : `/#${l.toLowerCase()}`}>{l}</a></li>
             ))}
           </ul>
         </div>

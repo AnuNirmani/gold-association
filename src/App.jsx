@@ -1,7 +1,11 @@
-﻿import './App.css';
+import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './homepage/HomePage';
+import AboutPage from './about/AboutPage';
 import ChartPage from './chart/ChartPage';
+import EventsPage from './events/EventsPage';
+import MembersPage from './members/MembersPage';
+import NewsPage from './news/NewsPage';
 import { LivePricesProvider } from './chart/LivePricesProvider';
 
 function App() {
@@ -9,7 +13,12 @@ function App() {
     <LivePricesProvider>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/chart" element={<ChartPage />} />
+        <Route path="/events" element={<EventsPage />} />
+        <Route path="/members" element={<MembersPage />} />
+        <Route path="/members/:id" element={<MembersPage />} />
+        <Route path="/news" element={<NewsPage />} />
       </Routes>
     </LivePricesProvider>
   );

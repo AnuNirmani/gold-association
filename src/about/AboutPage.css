@@ -1,0 +1,57 @@
+.about-container { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
+.about-hero { padding: 82px 0 88px; background: var(--navy); color: white; border-bottom: 3px solid var(--gold); }
+.about-eyebrow { color: var(--gold-dark); font-size: 12px; font-weight: 700; letter-spacing: .18em; margin-bottom: 14px; }
+.about-hero .about-eyebrow, .about-purpose .about-eyebrow, .about-join .about-eyebrow { color: var(--gold); }
+.about-hero h1 { max-width: 760px; font-size: clamp(40px, 5.4vw, 66px); margin-bottom: 18px; }
+.about-hero h1 span { color: var(--gold); }
+.about-hero .about-container > p:last-child { max-width: 650px; color: #c5cad4; font-size: 16px; }
+
+.about-story { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding-block: 88px; }
+.about-story__image { position: relative; min-height: 430px; }
+.about-story__image img { width: 100%; height: 100%; min-height: 430px; object-fit: cover; border-radius: 20px; box-shadow: var(--shadow-md); }
+.about-story__image span { position: absolute; right: 18px; bottom: 18px; padding: 10px 16px; border: 1px solid rgb(255 255 255 / 28%); border-radius: 999px; background: rgb(11 18 32 / 82%); color: white; font-size: 12px; font-weight: 600; }
+.about-story__content h2, .about-values__heading h2 { color: var(--navy); font-size: clamp(30px, 3.8vw, 42px); margin-bottom: 18px; }
+.about-story__content > p:not(.about-eyebrow) { color: var(--text-secondary); font-size: 15px; line-height: 1.8; margin-bottom: 14px; }
+.about-story__content .btn-primary { margin-top: 12px; }
+
+.about-purpose { padding-block: 72px; background: var(--navy); color: white; }
+.about-purpose__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.about-purpose__grid article { padding: 32px; border: 1px solid rgb(255 255 255 / 12%); border-radius: 18px; background: rgb(255 255 255 / 4%); }
+.about-purpose__icon, .about-value__icon { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 24px; border: 1px solid var(--gold-border); border-radius: 14px; background: var(--gold-light); color: var(--gold-dark); font-size: 24px; }
+.about-purpose__icon { color: var(--gold); }
+.about-purpose h2 { max-width: 390px; margin-bottom: 12px; font-family: var(--font-heading); font-size: 28px; }
+.about-purpose__grid article > p:last-child { max-width: 470px; color: #c5cad4; font-size: 14px; line-height: 1.8; }
+
+.about-values { padding-block: 84px; }
+.about-values__heading { max-width: 650px; margin: 0 auto 38px; text-align: center; }
+.about-values__heading > p:last-child { color: var(--text-secondary); font-size: 14px; }
+.about-values__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.about-value { padding: 28px; }
+.about-value h3 { margin-bottom: 8px; color: var(--navy); font-size: 18px; }
+.about-value p { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+
+.about-join { padding-block: 42px; background: #111827; color: white; }
+.about-join__inner { display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.about-join h2 { font-size: clamp(26px, 3.5vw, 36px); }
+.about-join .about-eyebrow { margin-bottom: 8px; }
+
+@media (max-width: 800px) {
+  .about-story { gap: 36px; padding-block: 64px; }
+  .about-story__image, .about-story__image img { min-height: 360px; }
+  .about-values__grid { gap: 16px; }
+  .about-value { padding: 22px; }
+}
+
+@media (max-width: 600px) {
+  .about-container { width: calc(100% - 32px); }
+  .about-hero { padding-block: 54px; }
+  .about-story, .about-purpose__grid, .about-values__grid { grid-template-columns: 1fr; }
+  .about-story { gap: 30px; padding-block: 48px; }
+  .about-story__image, .about-story__image img { min-height: 280px; }
+  .about-purpose { padding-block: 48px; }
+  .about-purpose__grid { gap: 18px; }
+  .about-purpose__grid article { padding: 24px; }
+  .about-values { padding-block: 56px; }
+  .about-values__heading { margin-bottom: 28px; }
+  .about-join__inner { align-items: flex-start; flex-direction: column; }
+}
