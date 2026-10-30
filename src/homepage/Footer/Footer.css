@@ -99,40 +99,7 @@
 .footer__contact-item a { color: rgba(255,255,255,0.70); }
 .footer__contact-item a:hover { color: #fff; }
 
-/* Newsletter */
-.footer__newsletter { margin-top: 4px; }
-.footer__newsletter-form {
-  display: flex;
-  margin-bottom: 8px;
-}
-.footer__newsletter-form input {
-  flex: 1; min-width: 0;
-  padding: 10px 14px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.10);
-  color: #fff;
-  font-size: 13px;
-  border-radius: 12px 0 0 12px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.footer__newsletter-form input::placeholder { color: rgba(255,255,255,0.50); }
-.footer__newsletter-form input:focus { border-color: rgba(255,255,255,0.30); }
-.footer__newsletter-form button {
-  background: var(--navy-hover);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 10px 16px;
-  border-radius: 0 12px 12px 0;
-  border: 1px solid rgba(255,255,255,0.10);
-  border-left: none;
-  white-space: nowrap;
-  transition: opacity 0.2s;
-  cursor: pointer;
-}
-.footer__newsletter-form button:hover { opacity: 0.90; }
-.footer__newsletter p { font-size: 11px; color: rgba(255,255,255,0.55); }
+
 
 /* Bottom bar */
 .footer__bottom {

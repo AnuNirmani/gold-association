@@ -57,17 +57,7 @@ function Footer() {
             <div className="footer__contact-item"><span>📞</span><a href="tel:+94771234567">+94 77 123 4567</a></div>
             <div className="footer__contact-item"><span>✉️</span><a href="mailto:info@goldassociation.com">info@goldassociation.com</a></div>
           </address>
-
-          <div className="footer__newsletter">
-            <div className="footer__col-title">Newsletter</div>
-            <form className="footer__newsletter-form" onSubmit={e => e.preventDefault()}>
-              <input type="email" placeholder="Enter your email" required autoComplete="email" />
-              <button type="submit">Register</button>
-            </form>
-            <p>By subscribing, you agree to receive association updates.</p>
-          </div>
         </div>
-
       </div>
 
       <div className="footer__bottom">

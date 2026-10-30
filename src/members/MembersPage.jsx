@@ -69,7 +69,6 @@ function MembersPage() {
                 <p className="member-card__position">{employee.position || 'Position unavailable'}</p>
                 <h3>{employee.name}</h3>
                 <div className="member-card__gold"><span>Gold type</span><strong>{employee.gold_price?.karat || 'Not assigned'}</strong></div>
-                <div className="member-card__price"><span>Gold price</span><strong>{formatPrice(employee.gold_price?.price)}</strong>{employee.gold_price?.unit && <small>{employee.gold_price.unit}</small>}</div>
               </div>
             </article>
             ))}
