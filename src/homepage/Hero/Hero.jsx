@@ -94,7 +94,7 @@ function Hero() {
             Uniting excellence in the gold and jewelry trade. Join us in our
             mission to promote ethical practices and industry growth.
           </p>
-          <a href="/#membership" className="btn-gold hero__cta">Become a Member</a>
+          <a href="/contact" className="btn-gold hero__cta">Become a Member</a>
         </div>
         <aside className="hcard">
           <div className="hcard__header">

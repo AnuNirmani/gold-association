@@ -1,8 +1,8 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import logoImg from '../../assets/logo.png';
 import './Navbar.css';
 
-const navLinks = ['Home', 'About', 'Members', 'Events', 'News', 'Gallery', 'Downloads', 'Contact'];
+const navLinks = ['Home', 'About', 'Members', 'Events', 'News', 'Downloads', 'Contact'];
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -34,16 +34,16 @@ function Navbar() {
               <a
                 key={link}
                 className="nav-link"
-                href={link === 'Home' ? '/' : link === 'About' ? '/about' : link === 'Members' ? '/members' : link === 'Events' || link === 'News' ? `/${link.toLowerCase()}` : `/#${link.toLowerCase()}`}
+                href={link === 'Home' ? '/' : link === 'About' ? '/about' : link === 'Members' ? '/members' : link === 'Events' || link === 'News' || link === 'Contact' ? `/${link.toLowerCase()}` : `/#${link.toLowerCase()}`}
               >
                 {link}
               </a>
             ))}
-            <a href="/#membership" className="navbar__cta">Be a Member</a>
+            <a href="/contact" className="navbar__cta">Be a Member</a>
           </nav>
 
           <button className="navbar__hamburger" onClick={() => setDrawerOpen(true)} aria-label="Open menu">
-            ☰
+            ?
           </button>
         </div>
       </header>
@@ -51,15 +51,15 @@ function Navbar() {
       <div className={`mobile-drawer${drawerOpen ? ' mobile-drawer--open' : ''}`}>
         <div className="mobile-drawer__head">
           <span>Menu</span>
-          <button onClick={close} aria-label="Close menu">✕</button>
+          <button onClick={close} aria-label="Close menu">?</button>
         </div>
         <div className="mobile-drawer__links">
           {navLinks.map(link => (
-            <a key={link} href={link === 'Home' ? '/' : link === 'About' ? '/about' : link === 'Members' ? '/members' : link === 'Events' || link === 'News' ? `/${link.toLowerCase()}` : `/#${link.toLowerCase()}`} onClick={close}>
+            <a key={link} href={link === 'Home' ? '/' : link === 'About' ? '/about' : link === 'Members' ? '/members' : link === 'Events' || link === 'News' || link === 'Contact' ? `/${link.toLowerCase()}` : `/#${link.toLowerCase()}`} onClick={close}>
               {link}
             </a>
           ))}
-          <a href="/#membership" className="mobile-drawer__cta" onClick={close}>Be a Member</a>
+          <a href="/contact" className="mobile-drawer__cta" onClick={close}>Be a Member</a>
         </div>
       </div>
 

@@ -6,6 +6,7 @@ import ChartPage from './chart/ChartPage';
 import EventsPage from './events/EventsPage';
 import MembersPage from './members/MembersPage';
 import NewsPage from './news/NewsPage';
+import ContactPage from './contact/ContactPage';
 import PostPage from './content/PostPage';
 import { LivePricesProvider } from './chart/LivePricesProvider';
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/members" element={<MembersPage />} />
         <Route path="/members/:id" element={<MembersPage />} />
         <Route path="/news" element={<NewsPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/posts/category/:categoryTypeId/post/:postId" element={<PostPage />} />
       </Routes>
     </LivePricesProvider>

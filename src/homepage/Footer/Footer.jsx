@@ -45,7 +45,7 @@ function Footer() {
         <div className="footer__col">
           <div className="footer__col-title">Resources</div>
           <ul>
-            {resources.map(l => <li key={l}><a href="#">{l}</a></li>)}
+            {resources.map(l => <li key={l}><a href={l === 'Contact Us' ? '/contact' : '#'}>{l}</a></li>)}
           </ul>
         </div>
 

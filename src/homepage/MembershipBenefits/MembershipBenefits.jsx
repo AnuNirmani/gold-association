@@ -30,7 +30,7 @@ function MembershipBenefits() {
               ))}
             </div>
 
-            <a href="#membership" className="btn-primary mb-join-btn">Join Membership</a>
+            <a href="/contact" className="btn-primary mb-join-btn">Join Membership</a>
 
             {/* Mini stats */}
             <div className="mb-stats">
