@@ -1,5 +1,5 @@
 import ContentListingPage from '../content/ContentListingPage';
-import { news } from '../content/contentData';
+import { POST_CATEGORIES } from '../content/postsApi';
 
 function NewsPage() {
   return (
@@ -8,7 +8,7 @@ function NewsPage() {
       title="The latest from"
       highlight="our community."
       intro="Read association updates and news relevant to the gold and jewelry trade."
-      items={news}
+      categoryTypeId={POST_CATEGORIES.news}
     />
   );
 }

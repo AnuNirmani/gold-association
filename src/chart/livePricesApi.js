@@ -1,5 +1,10 @@
 import { metals } from './metalData';
 
+const baseUrl = (
+  import.meta.env.VITE_LARAVEL_API_BASE_URL || 'https://admin.slja.lk'
+).replace(/\/+$/, '');
+const api = baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
+
 function parseNumeric(value) {
   if (typeof value === 'number') return Number.isFinite(value) ? value : null;
   if (typeof value === 'string') {
@@ -199,19 +204,13 @@ export function fetchChartLiveMetals() {
 }
 
 async function loadChartLiveMetals() {
-  const baseUrl = import.meta.env.VITE_LARAVEL_API_BASE_URL?.replace(/\/$/, '');
-
   const latestAllEndpoints = [
-    '/api/gold-prices',
-    '/api/gold-prices/latest',
-    ...(baseUrl ? [`${baseUrl}/api/gold-prices`, `${baseUrl}/api/gold-prices/latest`] : []),
-    'http://127.0.0.1:8000/api/gold-prices',
+    `${api}/gold-prices`,
+    `${api}/gold-prices/latest`,
   ];
 
   const todayEndpoints = [
-    '/api/gold-prices/today',
-    ...(baseUrl ? [`${baseUrl}/api/gold-prices/today`] : []),
-    'http://127.0.0.1:8000/api/gold-prices/today',
+    `${api}/gold-prices/today`,
   ];
 
   const [todayPayload, latestAllPayload] = await Promise.all([
@@ -286,11 +285,9 @@ async function loadChartLiveMetals() {
  * @param {string} range - The time range ('1D', '1W', '1M', '3M', '1Y')
  * @returns {Promise<{prices: number[], labels: string[]}>} Chart data with prices and labels
  */
-async function fetchChartPayload(karatId, range, baseUrl) {
+async function fetchChartPayload(karatId, range) {
   const endpoints = [
-    `/api/gold-prices/chart/${karatId}?range=${range}`,
-    ...(baseUrl ? [`${baseUrl}/api/gold-prices/chart/${karatId}?range=${range}`] : []),
-    `http://127.0.0.1:8000/api/gold-prices/chart/${karatId}?range=${range}`,
+    `${api}/gold-prices/chart/${karatId}?range=${range}`,
   ];
   return fetchFirstJson(endpoints);
 }
@@ -363,14 +360,13 @@ export async function fetchChartRangeData(karatId, range = '1D', latestUpdatedAt
     return { prices: [], labels: [], statistics: null, fallbackDate: null };
   }
 
-  const baseUrl = import.meta.env.VITE_LARAVEL_API_BASE_URL?.replace(/\/$/, '');
   const latestDate = latestUpdatedAt ? new Date(latestUpdatedAt) : null;
   const latestIsNotToday = range === '1D'
     && latestDate
     && !Number.isNaN(latestDate.getTime())
     && latestDate.toDateString() !== new Date().toDateString();
   const requestRange = latestIsNotToday ? '1Y' : range;
-  const payload = await fetchChartPayload(karatId, requestRange, baseUrl);
+  const payload = await fetchChartPayload(karatId, requestRange);
   const chartData = payload ? parseChartPayload(payload) : { prices: [], labels: [], samples: [], statistics: null };
 
   if (latestIsNotToday) {

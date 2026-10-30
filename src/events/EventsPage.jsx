@@ -1,5 +1,5 @@
 import ContentListingPage from '../content/ContentListingPage';
-import { events } from '../content/contentData';
+import { POST_CATEGORIES } from '../content/postsApi';
 
 function EventsPage() {
   return (
@@ -8,7 +8,7 @@ function EventsPage() {
       title="Meet, learn, and"
       highlight="connect."
       intro="Explore gatherings and learning opportunities for the gold and jewelry trade community."
-      items={events}
+      categoryTypeId={POST_CATEGORIES.events}
     />
   );
 }
