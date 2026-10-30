@@ -1,17 +1,37 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { createCustomer } from './customersApi';
 import Navbar from '../homepage/Navbar/Navbar';
 import Footer from '../homepage/Footer/Footer';
 import './ContactPage.css';
 
 function ContactPage() {
-  const [draftOpened, setDraftOpened] = useState(false);
+  const [status, setStatus] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const inFlight = useRef(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const body = `Name: ${data.get('name').trim()}\nEmail: ${data.get('email').trim()}\nPhone: ${data.get('phone').trim()}\nGold type: ${data.get('goldType')}`;
-    window.location.href = `mailto:info@goldassociation.com?subject=${encodeURIComponent('Gold enquiry')}&body=${encodeURIComponent(body)}`;
-    setDraftOpened(true);
+    if (inFlight.current) return;
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    inFlight.current = true;
+    setSubmitting(true);
+    setStatus(null);
+    try {
+      await createCustomer({
+        name: data.get('name').trim(),
+        email: data.get('email').trim(),
+        phone: data.get('phone').trim(),
+        gold_type: data.get('goldType'),
+      });
+      form.reset();
+      setStatus({ type: 'success', message: 'Your enquiry has been saved. Thank you for contacting us.' });
+    } catch (error) {
+      setStatus({ type: 'error', message: error.message });
+    } finally {
+      inFlight.current = false;
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -41,7 +61,7 @@ function ContactPage() {
           <div className="contact-form-card card">
             <h2>Make an enquiry</h2>
             <p>All fields are required.</p>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} aria-busy={submitting}>
               <div className="contact-field">
                 <label htmlFor="contact-name">Full name</label>
                 <input id="contact-name" name="name" autoComplete="name" placeholder="Enter your full name" required maxLength={120} pattern=".*\S.*" />
@@ -65,9 +85,9 @@ function ContactPage() {
                   <option value="Other / Not sure">Other / Not sure</option>
                 </select>
               </div>
-              <p className="contact-form-note" id="contact-email-note">This opens your email app with your enquiry ready to send.</p>
-              <button className="btn-gold contact-submit" type="submit" aria-describedby="contact-email-note">Prepare enquiry <span aria-hidden="true">→</span></button>
-              {draftOpened && <p className="contact-status" role="status">Your email app was requested. Send the draft there to complete your enquiry. If it did not open, email info@goldassociation.com directly.</p>}
+              <p className="contact-form-note" id="contact-save-note">Submit your details and gold preference to our team.</p>
+              <button className="btn-gold contact-submit" type="submit" disabled={submitting} aria-describedby="contact-save-note">{submitting ? 'Saving enquiry…' : 'Prepare enquiry'} <span aria-hidden="true">→</span></button>
+              {status && <p className={`contact-status contact-status--${status.type}`} role={status.type === 'error' ? 'alert' : 'status'}>{status.message}</p>}
             </form>
           </div>
         </section>

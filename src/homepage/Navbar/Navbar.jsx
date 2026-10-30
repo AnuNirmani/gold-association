@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import logoImg from '../../assets/logo.png';
 import './Navbar.css';
 
-const navLinks = ['Home', 'About', 'Members', 'Events', 'News', 'Downloads', 'Contact'];
+const navLinks = ['Home', 'About', 'Members', 'Events', 'News', 'Gallery', 'Contact'];
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -34,7 +34,7 @@ function Navbar() {
               <a
                 key={link}
                 className="nav-link"
-                href={link === 'Home' ? '/' : link === 'About' ? '/about' : link === 'Members' ? '/members' : link === 'Events' || link === 'News' || link === 'Contact' ? `/${link.toLowerCase()}` : `/#${link.toLowerCase()}`}
+                href={link === 'Home' ? '/' : link === 'Downloads' ? '/#downloads' : `/${link.toLowerCase()}`}
               >
                 {link}
               </a>
@@ -55,7 +55,7 @@ function Navbar() {
         </div>
         <div className="mobile-drawer__links">
           {navLinks.map(link => (
-            <a key={link} href={link === 'Home' ? '/' : link === 'About' ? '/about' : link === 'Members' ? '/members' : link === 'Events' || link === 'News' || link === 'Contact' ? `/${link.toLowerCase()}` : `/#${link.toLowerCase()}`} onClick={close}>
+            <a key={link} href={link === 'Home' ? '/' : link === 'Downloads' ? '/#downloads' : `/${link.toLowerCase()}`} onClick={close}>
               {link}
             </a>
           ))}

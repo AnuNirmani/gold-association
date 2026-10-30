@@ -2,7 +2,7 @@
 import './Footer.css';
 
 const quickLinks = ['Home', 'About', 'Members', 'Events', 'News'];
-const resources  = ['Registration', 'Downloads', 'Gallery', 'Contact Us'];
+const resources  = ['Registration', 'Gallery', 'Contact Us'];
 
 function Footer() {
   return (
@@ -45,7 +45,7 @@ function Footer() {
         <div className="footer__col">
           <div className="footer__col-title">Resources</div>
           <ul>
-            {resources.map(l => <li key={l}><a href={l === 'Contact Us' ? '/contact' : '#'}>{l}</a></li>)}
+            {resources.map(l => <li key={l}><a href={l === 'Contact Us' ? '/contact' : l === 'Gallery' ? '/gallery' : '#'}>{l}</a></li>)}
           </ul>
         </div>
 
